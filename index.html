@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document.io</title>
+    <!-- Импорт шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Scada:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #4285f4;
+            --accent-color: #2962ff;
+            --light-color: #f8f9fa;
+            --dark-color: #202124;
+            --success-color: #0f9d58;
+            --warning-color: #f4b400;
+            --danger-color: #db4437;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+            flex-direction: column;
+        }
+
+        .cube-container {
+            width: 120px;
+            height: 120px;
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 8s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 3px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(60px); background: rgba(255, 245, 245, 0.9); }
+        .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(60px); background: rgba(255, 250, 240, 0.9); }
+        .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(60px); background: rgba(240, 255, 240, 0.9); }
+        .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(60px); background: rgba(240, 240, 255, 0.9); }
+        .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(60px); background: rgba(255, 240, 245, 0.9); }
+        .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(60px); background: rgba(240, 255, 255, 0.9); }
+
+        @keyframes rotate {
+            from { transform: rotateX(0) rotateY(0) rotateZ(0); }
+            to { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 30px;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--primary-color);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-actions button {
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 10px;
+        }
+
+        .user-actions button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box button {
+            padding: 12px 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+        }
+
+        .create-doc-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .create-doc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+        }
+
+        .documents-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .document-card {
+            background: var(--light-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .document-card:hover {
+            background: #e8f0fe;
+            transform: translateX(5px);
+        }
+
+        .document-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .document-card p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Editor */
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding-right: 10px;
+            border-right: 1px solid #ddd;
+        }
+
+        .toolbar-group:last-child {
+            border-right: none;
+        }
+
+        .toolbar button, .toolbar select {
+            padding: 8px 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .toolbar button:hover, .toolbar select:hover {
+            background: #e8f0fe;
+        }
+
+        .toolbar button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .color-picker input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .font-size-control button {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .font-size-control span {
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .editor {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+            background: white;
+            min-height: 500px;
+            outline: none;
+        }
+
+        .editor img {
+            max-width: 100%;
+            cursor: move;
+            position: relative;
+        }
+
+        .img-resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-color);
+            border: 2px solid white;
+            border-radius: 50%;
+            bottom: -6px;
+            right: -6px;
+            cursor: nwse-resize;
+        }
+
+        .auto-save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--box-shadow);
+            transform: translateY(-100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .auto-save-indicator.show {
+            transform: translateY(0);
+        }
+
+        /* Share dialog */
+        .share-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 500px;
+            max-width: 90%;
+            display: none;
+        }
+
+        .share-dialog h2 {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .share-url {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .share-url input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 16px;
+        }
+
+        .share-url button {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .share-url button:hover {
+            background: var(--secondary-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        /* Welcome screen */
+        .welcome-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: white;
+            margin: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+
+        .welcome-screen i {
+            font-size: 64px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .welcome-screen h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .welcome-screen p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        /* Registration dialog */
+        .registration-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 450px;
+            max-width: 90%;
+            display: none;
+        }
+
+        .registration-dialog h2 {
+            margin-bottom: 25px;
+            color: var(--dark-color);
+            text-align: center;
+        }
+
+        .registration-dialog input, .registration-dialog select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .language-select {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .language-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-option.selected {
+            border-color: var(--primary-color);
+            background: #e8f0fe;
+        }
+
+        .language-option i {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .registration-dialog button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .registration-dialog button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .footer-version {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .footer-author {
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .toolbar-group {
+                border-right: none;
+                padding-right: 0;
+                margin-bottom: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .toolbar {
+                justify-content: center;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: var(--dark-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 100;
+        }
+
+        /* Document view mode */
+        .view-mode .sidebar {
+            display: none;
+        }
+
+        .view-mode .editor-container {
+            margin: 0;
+            border-radius: 0;
+            height: 100vh;
+        }
+
+        .view-mode .toolbar {
+            display: none;
+        }
+
+        .view-mode .editor {
+            cursor: default;
+        }
+
+        .view-mode .editor:focus {
+            outline: none;
+        }
+
+        .view-mode header .user-actions {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="cube-container">
+            <div class="cube">
+                <div class="cube-face"><i class="fas fa-file"></i></div>
+                <div class="cube-face"><i class="fas fa-edit"></i></div>
+                <div class="cube-face"><i class="fas fa-image"></i></div>
+                <div class="cube-face"><i class="fas fa-font"></i></div>
+                <div class="cube-face"><i class="fas fa-share"></i></div>
+                <div class="cube-face"><i class="fas fa-save"></i></div>
+            </div>
+        </div>
+        <div class="loading-text">DOCUMENT.IO ЗАГРУЖАЕТСЯ</div>
+    </div>
+
+    <!-- Overlay for modals -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Registration Dialog -->
+    <div class="registration-dialog" id="registration-dialog">
+        <h2><i class="fas fa-user-plus"></i> Регистрация</h2>
+        <input type="text" id="username-input" placeholder="Введите ваш никнейм (латиница)" pattern="[A-Za-z0-9]+">
+        <p>Выберите язык:</p>
+        <div class="language-select">
+            <div class="language-option selected" data-lang="ru">
+                <i class="fas fa-flag"></i>
+                <span>Русский</span>
+            </div>
+            <div class="language-option" data-lang="uk">
+                <i class="fas fa-flag"></i>
+                <span>Українська</span>
+            </div>
+        </div>
+        <button id="register-btn">Начать использовать</button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo" id="logo-btn">
+            <i class="fas fa-file-alt"></i>
+            <h1>Document.io</h1>
+        </div>
+        <div class="user-actions">
+            <button id="save-btn"><i class="fas fa-save"></i> Сохранить</button>
+            <button id="share-btn"><i class="fas fa-share"></i> Поделиться</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2><i class="fas fa-folder-open"></i> Мои документы</h2>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Поиск документов...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="create-doc-btn" id="create-doc-btn"><i class="fas fa-plus"></i> Создать документ</button>
+            <div class="documents-list" id="documents-list">
+                <!-- Documents will be listed here -->
+            </div>
+        </div>
+
+        <!-- Editor or Welcome Screen -->
+        <div id="content-area">
+            <!-- Initially showing welcome screen -->
+            <div class="welcome-screen" id="welcome-screen">
+                <i class="fas fa-file-alt"></i>
+                <h2>Добро пожаловать в Document.io</h2>
+                <p>Создавайте красивые документы с текстом и изображениями. Делитесь ими с другими или сохраняйте локально на своем устройстве.</p>
+                <button class="create-doc-btn" id="welcome-create-btn"><i class="fas fa-plus"></i> Создать первый документ</button>
+            </div>
+
+            <!-- Editor container (initially hidden) -->
+            <div class="editor-container" id="editor-container" style="display: none;">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <select id="font-family" class="tooltip" data-tooltip="Шрифт">
+                            <option value="Arial">Arial</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Roboto" selected>Roboto</option>
+                            <option value="Open Sans">Open Sans</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Source Sans Pro">Source Sans Pro</option>
+                            <option value="Ubuntu">Ubuntu</option>
+                            <option value="PT Sans">PT Sans</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-group">
+                        <div class="font-size-control">
+                            <button id="font-decrease" class="tooltip" data-tooltip="Уменьшить шрифт">-</button>
+                            <span id="font-size">3</span>
+                            <button id="font-increase" class="tooltip" data-tooltip="Увеличить шрифт">+</button>
+                        </div>
+                    </div>
+                    <div class="toolbar-group">
+                        <button id="bold-btn" class="tooltip" data-tooltip="Жирный"><i class="fas fa-bold"></i></button>
+                        <button id="italic-btn" class="tooltip" data-tooltip="Курсив"><i class="fas fa-italic"></i></button>
+                        <button id="underline-btn" class="tooltip" data-tooltip="Подчеркнутый"><i class="fas fa-underline"></i></button>
+                        <button id="strike-btn" class="tooltip" data-tooltip="Зачеркнутый"><i class="fas fa-strikethrough"></i></button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button id="align-left-btn" class="tooltip" data-tooltip="Выровнять по левому краю"><i class="fas fa-align-left"></i></button>
+                        <button id="align-center-btn" class="tooltip" data-tooltip="Выровнять по центру"><i class="fas fa-align-center"></i></button>
+                        <button id="align-right-btn" class="tooltip" data-tooltip="Выровнять по правому краю"><i class="fas fa-align-right"></i></button>
+                        <button id="align-justify-btn" class="tooltip" data-tooltip="Выровнять по ширине"><i class="fas fa-align-justify"></i></button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button id="insert-image-btn" class="tooltip" data-tooltip="Вставить изображение"><i class="fas fa-image"></i></button>
+                        <div class="color-picker tooltip" data-tooltip="Цвет текста">
+                            <input type="color" id="text-color" value="#000000">
+                        </div>
+                        <button id="undo-btn" class="tooltip" data-tooltip="Отменить"><i class="fas fa-undo"></i></button>
+                        <button id="redo-btn" class="tooltip" data-tooltip="Повторить"><i class="fas fa-redo"></i></button>
+                    </div>
+                </div>
+                <div class="editor" id="editor" contenteditable="true">
+                    <!-- Document content will be here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto Save Indicator -->
+    <div class="auto-save-indicator" id="auto-save-indicator">
+        <i class="fas fa-check-circle"></i>
+        <span>Документ сохранен</span>
+    </div>
+
+    <!-- Share Dialog -->
+    <div class="share-dialog" id="share-dialog">
+        <h2><i class="fas fa-share"></i> Поделиться документом</h2>
+        <p>Скопируйте ссылку ниже, чтобы поделиться документом:</p>
+        <div class="share-url">
+            <input type="text" id="share-url-input" readonly>
+            <button id="copy-url-btn"><i class="fas fa-copy"></i> Копировать</button>
+        </div>
+        <button id="close-share-dialog" style="width: 100%; padding: 12px; background: var(--secondary-color); color: white; border: none; border-radius: var(--border-radius); cursor: pointer;">Закрыть</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span class="footer-version">v1.1 update</span>
+        <span class="footer-author">By Ilnitsky</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate preloader
+            setTimeout(function() {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('preloader').style.display = 'none';
+                    
+                    // Show registration dialog if not registered
+                    if (!localStorage.getItem('userRegistered')) {
+                        document.getElementById('registration-dialog').style.display = 'block';
+                        document.getElementById('overlay').style.display = 'block';
+                    }
+                }, 500);
+            }, 3000);
+
+            // Initialize variables
+            let currentDocId = null;
+            let documents = JSON.parse(localStorage.getItem('documents')) || {};
+            let isEditMode = true;
+            let autoSaveInterval;
+            let currentFontSize = 3; // 1-6 scale
+            let selectedLanguage = 'ru';
+
+            // Initialize editor
+            const editor = document.getElementById('editor');
+            const documentsList = document.getElementById('documents-list');
+            const createDocBtn = document.getElementById('create-doc-btn');
+            const welcomeCreateBtn = document.getElementById('welcome-create-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const shareBtn = document.getElementById('share-btn');
+            const autoSaveIndicator = document.getElementById('auto-save-indicator');
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const editorContainer = document.getElementById('editor-container');
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const logoBtn = document.getElementById('logo-btn');
+            const registerBtn = document.getElementById('register-btn');
+            const usernameInput = document.getElementById('username-input');
+            const languageOptions = document.querySelectorAll('.language-option');
+            
+            // Formatting buttons
+            const boldBtn = document.getElementById('bold-btn');
+            const italicBtn = document.getElementById('italic-btn');
+            const underlineBtn = document.getElementById('underline-btn');
+            const strikeBtn = document.getElementById('strike-btn');
+            const alignLeftBtn = document.getElementById('align-left-btn');
+            const alignCenterBtn = document.getElementById('align-center-btn');
+            const alignRightBtn = document.getElementById('align-right-btn');
+            const alignJustifyBtn = document.getElementById('align-justify-btn');
+            const fontFamilySelect = document.getElementById('font-family');
+            const fontSizeDisplay = document.getElementById('font-size');
+            const fontIncreaseBtn = document.getElementById('font-increase');
+            const fontDecreaseBtn = document.getElementById('font-decrease');
+            const textColorPicker = document.getElementById('text-color');
+            const insertImageBtn = document.getElementById('insert-image-btn');
+            const undoBtn = document.getElementById('undo-btn');
+            const redoBtn = document.getElementById('redo-btn');
+            const closeShareDialogBtn = document.getElementById('close-share-dialog');
+
+            // Check if we're in view mode (from shared link)
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewDocId = urlParams.get('view');
+            
+            if (viewDocId && documents[viewDocId]) {
+                // View mode - hide sidebar and editing tools
+                document.body.classList.add('view-mode');
+                openDocument(viewDocId, false);
+                welcomeScreen.style.display = 'none';
+                editorContainer.style.display = 'flex';
+            } else {
+                // Edit mode - load documents list
+                loadDocumentsList();
+
+                // Show welcome screen if no documents
+                if (Object.keys(documents).length === 0) {
+                    welcomeScreen.style.display = 'flex';
+                    editorContainer.style.display = 'none';
+                }
+            }
+
+            // Create new document
+            createDocBtn.addEventListener('click', createNewDocument);
+            welcomeCreateBtn.addEventListener('click', createNewDocument);
+
+            // Save document
+            saveBtn.addEventListener('click', saveDocument);
+
+            // Share document
+            shareBtn.addEventListener('click', shareDocument);
+
+            // Close share dialog
+            closeShareDialogBtn.addEventListener('click', closeShareDialog);
+
+            // Search documents
+            searchBtn.addEventListener('click', searchDocuments);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchDocuments();
+                }
+            });
+
+            // Logo click - reload the app
+            logoBtn.addEventListener('click', function() {
+                window.location.href = window.location.origin + window.location.pathname;
+            });
+
+            // Language selection
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    languageOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedLanguage = this.getAttribute('data-lang');
+                });
+            });
+
+            // Registration
+            registerBtn.addEventListener('click', function() {
+                const username = usernameInput.value.trim();
+                if (username && /^[A-Za-z0-9]+$/.test(username)) {
+                    localStorage.setItem('userRegistered', 'true');
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('language', selectedLanguage);
+                    document.getElementById('registration-dialog').style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                } else {
+                    alert('Пожалуйста, введите корректный никнейм (только латинские буквы и цифры)');
+                }
+            });
+
+            // Formatting buttons event listeners
+            boldBtn.addEventListener('click', () => {
+                formatText('bold');
+                boldBtn.classList.toggle('active', document.queryCommandState('bold'));
+            });
+            
+            italicBtn.addEventListener('click', () => {
+                formatText('italic');
+                italicBtn.classList.toggle('active', document.queryCommandState('italic'));
+            });
+            
+            underlineBtn.addEventListener('click', () => {
+                formatText('underline');
+                underlineBtn.classList.toggle('active', document.queryCommandState('underline'));
+            });
+            
+            strikeBtn.addEventListener('click', () => {
+                formatText('strikeThrough');
+                strikeBtn.classList.toggle('active', document.queryCommandState('strikeThrough'));
+            });
+            
+            alignLeftBtn.addEventListener('click', () => {
+                formatText('justifyLeft');
+                updateAlignmentButtons('justifyLeft');
+            });
+            
+            alignCenterBtn.addEventListener('click', () => {
+                formatText('justifyCenter');
+                updateAlignmentButtons('justifyCenter');
+            });
+            
+            alignRightBtn.addEventListener('click', () => {
+                formatText('justifyRight');
+                updateAlignmentButtons('justifyRight');
+            });
+            
+            alignJustifyBtn.addEventListener('click', () => {
+                formatText('justifyFull');
+                updateAlignmentButtons('justifyFull');
+            });
+            
+            fontFamilySelect.addEventListener('change', () => {
+                document.execCommand('fontName', false, fontFamilySelect.value);
+                editor.focus();
+            });
+            
+            fontIncreaseBtn.addEventListener('click', () => {
+                if (currentFontSize < 6) {
+                    currentFontSize++;
+                    fontSizeDisplay.textContent = currentFontSize;
+                    // Apply font size using inline style
+                    document.execCommand('fontSize', false, currentFontSize);
+                    editor.focus();
+                }
+            });
+            
+            fontDecreaseBtn.addEventListener('click', () => {
+                if (currentFontSize > 1) {
+                    currentFontSize--;
+                    fontSizeDisplay.textContent = currentFontSize;
+                    document.execCommand('fontSize', false, currentFontSize);
+                    editor.focus();
+                }
+            });
+            
+            textColorPicker.addEventListener('input', () => {
+                document.execCommand('foreColor', false, textColorPicker.value);
+                editor.focus();
+            });
+            
+            insertImageBtn.addEventListener('click', insertImage);
+            
+            undoBtn.addEventListener('click', () => {
+                document.execCommand('undo');
+                editor.focus();
+            });
+            
+            redoBtn.addEventListener('click', () => {
+                document.execCommand('redo');
+                editor.focus();
+            });
+
+            // Set up auto-save
+            autoSaveInterval = setInterval(saveDocument, 30000); // 30 seconds
+
+            // Functions
+            function loadDocumentsList() {
+                documentsList.innerHTML = '';
+                
+                for (const docId in documents) {
+                    const doc = documents[docId];
+                    const docElement = document.createElement('div');
+                    docElement.className = 'document-card';
+                    docElement.innerHTML = `
+                        <h3>${doc.name}</h3>
+                        <p>Изменен: ${new Date(doc.updatedAt).toLocaleString()}</p>
+                    `;
+                    docElement.addEventListener('click', () => openDocument(docId, true));
+                    documentsList.appendChild(docElement);
+                }
+            }
+
+            function searchDocuments() {
+                const query = searchInput.value.toLowerCase();
+                const docCards = documentsList.querySelectorAll('.document-card');
+                
+                docCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    if (title.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            function createNewDocument() {
+                const docName = prompt('Введите название документа:', 'Новый документ');
+                if (!docName) return;
+                
+                const docId = 'doc_' + Date.now();
+                const newDoc = {
+                    id: docId,
+                    name: docName,
+                    content: '',
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                };
+                
+                documents[docId] = newDoc;
+                localStorage.setItem('documents', JSON.stringify(documents));
+                
+                loadDocumentsList();
+                openDocument(docId, true);
+                
+                // Hide welcome screen and show editor
+                welcomeScreen.style.display = 'none';
+                editorContainer.style.display = 'flex';
+            }
+
+            function openDocument(docId, editMode) {
+                const doc = documents[docId];
+                if (!doc) return;
+                
+                currentDocId = docId;
+                editor.innerHTML = doc.content || '<p>Начните печатать здесь...</p>';
+                isEditMode = editMode;
+                
+                if (editMode) {
+                    editor.contentEditable = 'true';
+                    document.querySelector('.editor-container').classList.remove('view-mode');
+                } else {
+                    editor.contentEditable = 'false';
+                    document.querySelector('.editor-container').classList.add('view-mode');
+                }
+                
+                // Hide welcome screen and show editor
+                welcomeScreen.style.display = 'none';
+                editorContainer.style.display = 'flex';
+                
+                // Add event listeners to images for resizing and moving
+                setTimeout(() => {
+                    const images = editor.querySelectorAll('img');
+                    images.forEach(img => {
+                        makeImageEditable(img);
+                    });
+                }, 100);
+            }
+
+            function saveDocument() {
+                if (!currentDocId) return;
+                
+                documents[currentDocId].content = editor.innerHTML;
+                documents[currentDocId].updatedAt = new Date();
+                localStorage.setItem('documents', JSON.stringify(documents));
+                
+                // Show auto-save indicator
+                autoSaveIndicator.classList.add('show');
+                setTimeout(() => {
+                    autoSaveIndicator.classList.remove('show');
+                }, 2000);
+            }
+
+            function shareDocument() {
+                if (!currentDocId) return;
+                
+                saveDocument();
+                
+                const shareUrl = `${window.location.origin}${window.location.pathname}?view=${currentDocId}`;
+                document.getElementById('share-url-input').value = shareUrl;
+                document.getElementById('share-dialog').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+            }
+
+            function closeShareDialog() {
+                document.getElementById('share-dialog').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+            }
+
+            function copyShareUrl() {
+                const shareUrlInput = document.getElementById('share-url-input');
+                shareUrlInput.select();
+                document.execCommand('copy');
+                alert('Ссылка скопирована в буфер обмена!');
+            }
+
+            function formatText(command, value = null) {
+                document.execCommand(command, false, value);
+                editor.focus();
+            }
+            
+            function updateAlignmentButtons(alignment) {
+                // Remove active class from all alignment buttons
+                alignLeftBtn.classList.remove('active');
+                alignCenterBtn.classList.remove('active');
+                alignRightBtn.classList.remove('active');
+                alignJustifyBtn.classList.remove('active');
+                
+                // Add active class to the clicked button
+                if (alignment === 'justifyLeft') alignLeftBtn.classList.add('active');
+                if (alignment === 'justifyCenter') alignCenterBtn.classList.add('active');
+                if (alignment === 'justifyRight') alignRightBtn.classList.add('active');
+                if (alignment === 'justifyFull') alignJustifyBtn.classList.add('active');
+            }
+
+            function insertImage() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                
+                input.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.style.maxWidth = '100%';
+                        
+                        // Show loading animation
+                        img.style.opacity = '0.5';
+                        editor.focus();
+                        document.execCommand('insertHTML', false, img.outerHTML);
+                        
+                        // Find the newly inserted image and make it editable
+                        setTimeout(() => {
+                            const images = editor.querySelectorAll('img');
+                            const newImg = images[images.length - 1];
+                            newImg.style.opacity = '1';
+                            makeImageEditable(newImg);
+                        }, 100);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                };
+                
+                input.click();
+            }
+
+            function makeImageEditable(img) {
+                // Add resize handle
+                const resizeHandle = document.createElement('div');
+                resizeHandle.className = 'img-resize-handle';
+                img.parentNode.style.position = 'relative';
+                img.parentNode.appendChild(resizeHandle);
+                
+                // Make image draggable
+                img.draggable = true;
+                
+                let isDragging = false;
+                let startX, startY, startWidth, startHeight;
+                
+                // Drag to move functionality
+                img.addEventListener('mousedown', function(e) {
+                    if (!isEditMode) return;
+                    
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startWidth = parseInt(window.getComputedStyle(img).width, 10);
+                    startHeight = parseInt(window.getComputedStyle(img).height, 10);
+                    
+                    img.style.cursor = 'grabbing';
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('mousemove', function(e) {
+                    if (!isDragging || !isEditMode) return;
+                    
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    
+                    img.style.width = (startWidth + dx) + 'px';
+                    img.style.height = (startHeight + dy) + 'px';
+                });
+                
+                document.addEventListener('mouseup', function() {
+                    isDragging = false;
+                    img.style.cursor = 'grab';
+                });
+                
+                // Resize functionality
+                resizeHandle.addEventListener('mousedown', function(e) {
+                    if (!isEditMode) return;
+                    
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startWidth = parseInt(window.getComputedStyle(img).width, 10);
+                    startHeight = parseInt(window.getComputedStyle(img).height, 10);
+                    
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+            }
+
+            // Close share dialog when clicking outside
+            document.getElementById('overlay').addEventListener('click', closeShareDialog);
+            
+            // Copy URL button
+            document.getElementById('copy-url-btn').addEventListener('click', copyShareUrl);
+            
+            // Update button states when editor gets focus
+            editor.addEventListener('focus', function() {
+                boldBtn.classList.toggle('active', document.queryCommandState('bold'));
+                italicBtn.classList.toggle('active', document.queryCommandState('italic'));
+                underlineBtn.classList.toggle('active', document.queryCommandState('underline'));
+                strikeBtn.classList.toggle('active', document.queryCommandState('strikeThrough'));
+            });
+        });
+    </script>
+</body>
+</html>
